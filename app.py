@@ -20,7 +20,7 @@ from chest_xray_predictor import predict_xray
 
 # with open('data/intents.json') as file:
 #     data = json.load(file)
-
+covid_vars=["COVID", "Corona", "Coronavirus", "COVID-19"]
 # def chat_reply(s):
 #     model = keras.models.load_model('model/covid_chatbot_model')
 #     with open('model/tokenizer.pickle', 'rb') as handle:
@@ -31,12 +31,14 @@ from chest_xray_predictor import predict_xray
 #     inp = s
 #     s=' '.join([stemmer.stem(i.lower()) for i in nltk.word_tokenize(inp)])
 #     inp=s.lower()
+#     inp=inp.replace("covid-19","covid").replace("coronavirus","covid").replace("corona","covid").replace("covid19","covid").replace("virus","covid")
 #     reply=""
 #     result = model.predict(keras.preprocessing.sequence.pad_sequences(tokenizer.texts_to_sequences([inp]),truncating='post', maxlen=max_len))
 #     tag = lbl_encoder.inverse_transform([np.argmax(result)])
 #     for i in data['intents']:
 #         if i['tag'] == tag:
 #             reply+=str(np.random.choice(i['responses']))
+#     reply.replace("covid",np.random.choice(covid_vars))
 #     return reply
 
 UPLOAD_FOLDER = 'uploads'

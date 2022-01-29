@@ -1,1 +1,6 @@
 venv
+dataset
+image_classifier
+.ipynb_checkpoints
+uploads
+__pycache__

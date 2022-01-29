@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .body {
+            background-image: url("/static/backg.png");
+            align-items: center;
+            align-content: center;
+            justify-content: center;
+        }
+
+        .textarea {
+            align-items: center;
+            justify-content: center;
+            width: 50%;
+            height: 50px;
+            padding: 2px 2px;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            background-color: #f8f8f8;
+            display: block;
+            margin: auto;
+            text-align: center;
+            margin-top: 40px;
+            resize: none;
+        }
+
+        .formm {
+            margin-top: 70px;
+            flex-wrap: nowrap;
+            align-content: center;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn {
+            display: block;
+            margin: auto;
+            background-color: transparent;
+            color: white;
+            margin-top: 40px;
+            padding: 0.5em 3em;
+            border-color: white;
+            box-sizing: border-box;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 400;
+            color: #FFFFFF;
+            text-align: center;
+            transition: all 0.15s;
+        }
+
+        .btn:hover {
+            color: #DDDDDD;
+            border-color: #DDDDDD;
+        }
+
+        .btn:active {
+            color: #BBBBBB;
+            border-color: #BBBBBB;
+        }
+
+        @media all and (max-width:30em) {
+            .btn {
+                display: block;
+                margin: 0.4em auto;
+            }
+        }
+        .heading{
+            font-family: monospace;
+            display: block;
+            margin: auto;
+            color: white;
+            font-weight: bolder;
+            text-align: center;
+            margin-top: 15%;
+            font-size: 200%;
+        }
+
+        .appli{
+            display: block;
+            margin: auto;
+            color: wheat;
+            font-weight: bolder;
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADSA</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
+    <link rel="manifest" href="/static/site.webmanifest">
+
+</head>
+<body class="body">
+    <h1 class="heading">Chatbot</h1>
+    <form method="POST" class="formm">
+        <input placeholder="Your Question" class="textarea" type="text" name="strin" id="strin">
+        <input class="btn" type="submit" name="submit" id="submit">
+    </form>
+    <!-- <a href="/application" class="appli">Go to Application</a> -->
+</body>
+</html>

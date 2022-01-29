@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <style>
         .body {
-            background-image: url("/static/backg.png");
+            /* background-image: url("/static/bg.jpeg"); */
+            background-color: cadetblue;
             align-items: center;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
             align-content: center;
             justify-content: center;
         }
@@ -26,7 +30,6 @@
             margin-top: 40px;
             resize: none;
         }
-
         .formm {
             margin-top: 70px;
             flex-wrap: nowrap;
@@ -69,16 +72,29 @@
             }
         }
         .heading{
+            width: 8ch;
+            animation: typing 2s steps(8), blink .5s step-end infinite alternate;
+            white-space: nowrap;
+            overflow: hidden;
             font-family: monospace;
-            display: block;
+            font-family: monospace;
             margin: auto;
             color: white;
             font-weight: bolder;
             text-align: center;
-            margin-top: 15%;
-            font-size: 200%;
+            margin-top: 10%;
+            font-size: 300%;
         }
-
+        @keyframes typing {
+            from {
+                width: 0
+            }
+        }
+    
+        @keyframes blink {
+        50% {
+            border-color: transparent
+        }}
         .appli{
             display: block;
             margin: auto;
@@ -87,10 +103,15 @@
             text-align: center;
             margin-top: 15px;
         }
+        .btndiv{
+            margin: auto;
+            display: flex;
+            width: 50%;
+        }
     </style>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADSA</title>
+    <title>Chatbot</title>
     <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
@@ -98,11 +119,17 @@
 
 </head>
 <body class="body">
-    <h1 class="heading">Chatbot</h1>
+    <div class="heading">Chatbot</div>
     <form method="POST" class="formm">
         <input placeholder="Your Question" class="textarea" type="text" name="strin" id="strin">
-        <input class="btn" type="submit" name="submit" id="submit">
+        <input class="btn" style="background-color: rgb(168, 0, 0);" type="submit" name="submit" id="submit">
     </form>
+    <div>{{ans}}<div>
     <!-- <a href="/application" class="appli">Go to Application</a> -->
+    <div class="btndiv">
+    <button class="btn">General</button>
+    <button class="btn">Stats</button>
+    <button class="btn">Visualise</button>
+    </div>
 </body>
 </html>

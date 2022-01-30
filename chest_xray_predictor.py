@@ -16,6 +16,6 @@ def predict_xray(image_path) -> str:
     predicted_y = clf.predict(x)
     #print(f'prediction: {predicted_y}')
     if int(predicted_y[0][0]) == 0:
-        return "covid"
+        return "The X-Ray scan seems to suggest that you are Covid Positive. Do take a PCR test for confirmation, consult a doctor and quarantine to keep yourself and others safe!"
     else:
-        return "normal"
+        return "The X-Ray scan seems to suggest that you are Covid Negative."

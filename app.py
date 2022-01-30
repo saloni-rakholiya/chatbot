@@ -2,6 +2,10 @@ from flask import Flask, flash, render_template,request, redirect
 import requests
 from time import time
 import os
+import math
+import re
+from collections import Counter
+WORD = re.compile(r"\w+")
 import json 
 import numpy as np
 from tensorflow import keras
@@ -33,6 +37,24 @@ covid_vars=["COVID", "Corona", "Coronavirus", "COVID-19"]
 exclude_list=["not","nor","don't","what","how","are","you"]
 expression_list=['.','!','!!']
 stop_words = [i for i in stopwords.words('english') if (i not in exclude_list)]
+
+def get_cosine(vec1, vec2):
+    intersection = set(vec1.keys()) & set(vec2.keys())
+    numerator = sum([vec1[x] * vec2[x] for x in intersection])
+
+    sum1 = sum([vec1[x] ** 2 for x in list(vec1.keys())])
+    sum2 = sum([vec2[x] ** 2 for x in list(vec2.keys())])
+    denominator = math.sqrt(sum1) * math.sqrt(sum2)
+
+    if not denominator:
+        return 0.0
+    else:
+        return float(numerator) / denominator
+
+
+def text_to_vector(text):
+    words = WORD.findall(text)
+    return Counter(words)
 
 def preprocess(example_sent):
   example_sent=example_sent.replace("covid-19","covid").replace("coronavirus","covid").replace("corona","covid").replace("covid19","covid").replace("virus","covid")
@@ -98,15 +120,10 @@ def xray_classifier():
 def stats():
     if request.method == "POST":
         strin=request.form.get("strin")
-        doc1 = nlp("I like apples.")
-        doc2 = nlp("I like oranges.")
-        doc1.similarity(doc2) 
         curr=[]
         for i in countries:
-            curr.append(nlp(strin).similarity(nlp(i)))
-                
+            curr.append(get_cosine(text_to_vector(i),text_to_vector(strin)))
         return render_template("stats.html", ans=get_country_data(countries[curr.index(max(curr))]))
-        # return render_template("stats.html", ans="Couldn't get data!")
     return render_template("stats.html")
 
 if __name__=="__main__":

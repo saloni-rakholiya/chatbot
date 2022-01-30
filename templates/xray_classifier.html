@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
     <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
+
     <style>
         .body {
             /* background-image: url("/static/bg.jpeg"); */
-            background-color: cadetblue;
+            background-color: black;
             align-items: center;
             background-position: center;
             background-repeat: no-repeat;
@@ -72,18 +78,26 @@
             }
         }
         .heading{
-            width: 8ch;
-            animation: typing 2s steps(8), blink .5s step-end infinite alternate;
+            width: 12ch;
+            animation: typing 2s steps(12), blink .5s step-end infinite alternate;
             white-space: nowrap;
             overflow: hidden;
-            font-family: monospace;
-            font-family: monospace;
+            font-family: 'Montserrat', sans-serif;
             margin: auto;
             color: white;
             font-weight: bolder;
             text-align: center;
             margin-top: 10%;
             font-size: 300%;
+        }
+
+        .pred{
+            margin: auto;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 150%;
         }
         @keyframes typing {
             from {
@@ -119,14 +133,12 @@
 
 </head>
 <body class="body">
-    <div class="heading">Chatbot</div>
+    <div class="heading">CHOOSE X-RAY</div>
     <form method="post" enctype="multipart/form-data" class="form">
-        <label for="xray_file">Choose X-Ray Image</label>
-        <input type="file" id="xray_file" name="xray_file" required>
+        <input type="file" class="btn btn-success" id="xray_file" name="xray_file" required>
+        <div class="pred">{{prediction_result}}</div>
         <input class="btn" style="background-color: rgb(168, 0, 0);" type="submit" name="submit" id="submit">
     </form>
-    <div>{{prediction_result}}<div>
-    <!-- <a href="/application" class="appli">Go to Application</a> -->
     <div class="btndiv">
     </div>
 </body>

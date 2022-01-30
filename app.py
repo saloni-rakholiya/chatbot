@@ -8,38 +8,60 @@ from tensorflow import keras
 from sklearn.preprocessing import LabelEncoder
 from time import time
 import json 
+from keras.models import model_from_json
 import numpy as np
-from tensorflow import keras
 import nltk
 nltk.download('punkt')
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
 import pickle
 from nltk.stem.lancaster import LancasterStemmer
 stemmer = LancasterStemmer()
 import time
 from chest_xray_predictor import predict_xray
 
-# with open('data/intents.json') as file:
-#     data = json.load(file)
+with open('data/intents.json') as file:
+    data = json.load(file)
+
+punc_list=['.','/','"','-','?',',',"'"]
 covid_vars=["COVID", "Corona", "Coronavirus", "COVID-19"]
-# def chat_reply(s):
-#     model = keras.models.load_model('model/covid_chatbot_model')
-#     with open('model/tokenizer.pickle', 'rb') as handle:
-#         tokenizer = pickle.load(handle)
-#     with open('model/label_encoder.pickle', 'rb') as enc:
-#         lbl_encoder = pickle.load(enc)
-#     max_len = 20
-#     inp = s
-#     s=' '.join([stemmer.stem(i.lower()) for i in nltk.word_tokenize(inp)])
-#     inp=s.lower()
-#     inp=inp.replace("covid-19","covid").replace("coronavirus","covid").replace("corona","covid").replace("covid19","covid").replace("virus","covid")
-#     reply=""
-#     result = model.predict(keras.preprocessing.sequence.pad_sequences(tokenizer.texts_to_sequences([inp]),truncating='post', maxlen=max_len))
-#     tag = lbl_encoder.inverse_transform([np.argmax(result)])
-#     for i in data['intents']:
-#         if i['tag'] == tag:
-#             reply+=str(np.random.choice(i['responses']))
-#     reply.replace("covid",np.random.choice(covid_vars))
-#     return reply
+exclude_list=["not","nor","don't","what","how","are","you"]
+expression_list=['.','!','!!']
+stop_words = [i for i in stopwords.words('english') if (i not in exclude_list)]
+
+def preprocess(example_sent):
+  example_sent=example_sent.replace("covid-19","covid").replace("coronavirus","covid").replace("corona","covid").replace("covid19","covid").replace("virus","covid")
+  word_tokens = word_tokenize(example_sent)
+  filtered_sentence = [stemmer.stem(w) for w in word_tokens if not w.lower() in stop_words]
+  filtered_sentence = []
+  for w in word_tokens:
+      if w not in stop_words:
+          filtered_sentence.append(w)
+  for i in punc_list:
+    if i in filtered_sentence:
+      filtered_sentence.remove(i)
+  return ' '.join(filtered_sentence)
+
+
+def chat_reply(s):
+    model = keras.models.load_model('model/model_lstm/lstm_covid_chatbot_model')
+    with open('model/model_lstm/tokenizer_lstm.pickle', 'rb') as handle:
+        tokenizer = pickle.load(handle)
+    with open('model/model_lstm/label_encoder_lstm.pickle', 'rb') as enc:
+        lbl_encoder = pickle.load(enc)
+    max_len = 50
+    inp=preprocess(s)
+    inp=s.lower()
+    reply=""
+    result = model.predict(keras.preprocessing.sequence.pad_sequences(tokenizer.texts_to_sequences([inp]),truncating='post', maxlen=max_len))
+    tag = lbl_encoder.inverse_transform([np.argmax(result)])
+    for i in data['intents']:
+        if i['tag'] == tag:
+            reply+=str(np.random.choice(i['responses']))
+            reply+=np.random.choice(expression_list)
+    reply.replace("covid",np.random.choice(covid_vars))
+    return reply
 
 UPLOAD_FOLDER = 'uploads'
 app=Flask(__name__)
@@ -49,8 +71,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def index():
     if request.method =="POST":
         strin=request.form.get("strin")
-        print(strin)
-        # return render_template("index.html", ans=chat_reply(strin))
+        return render_template("index.html", ans=chat_reply(strin))
     return render_template("index.html", ans="")
 
 @app.route('/xray_classifier', methods=["GET", "POST"])

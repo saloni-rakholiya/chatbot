@@ -5,6 +5,7 @@ import os
 import json 
 import numpy as np
 from tensorflow import keras
+import en_core_web_sm
 from sklearn.preprocessing import LabelEncoder
 from time import time
 import json 
@@ -20,6 +21,9 @@ from nltk.stem.lancaster import LancasterStemmer
 stemmer = LancasterStemmer()
 import time
 from chest_xray_predictor import predict_xray
+from api_calls import get_country_data, mainlist, countries
+
+nlp = en_core_web_sm.load()
 
 with open('data/intents.json') as file:
     data = json.load(file)
@@ -89,6 +93,21 @@ def xray_classifier():
         file.save(file_path)
         return render_template("xray_classifier.html", prediction_result=predict_xray(file_path))
     return render_template("xray_classifier.html")
+
+@app.route('/stats', methods=["GET", "POST"])
+def stats():
+    if request.method == "POST":
+        strin=request.form.get("strin")
+        doc1 = nlp("I like apples.")
+        doc2 = nlp("I like oranges.")
+        doc1.similarity(doc2) 
+        curr=[]
+        for i in countries:
+            curr.append(nlp(strin).similarity(nlp(i)))
+                
+        return render_template("stats.html", ans=get_country_data(countries[curr.index(max(curr))]))
+        # return render_template("stats.html", ans="Couldn't get data!")
+    return render_template("stats.html")
 
 if __name__=="__main__":
     port = int(os.environ.get("PORT", 5000))

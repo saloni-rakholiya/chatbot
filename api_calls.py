@@ -265,7 +265,7 @@ def get_country_data(s):
     response = requests.get("https://corona.lmao.ninja/v2/countries/"+s+"?yesterday=true&strict=false&query")
     if response.status_code == 200:
         print(response.json())
-        return str(response.json())
+        return response.json()
 
 
 # if __name__ == "__main__":

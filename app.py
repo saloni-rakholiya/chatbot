@@ -1,4 +1,4 @@
-from flask import Flask, flash, render_template,request, redirect
+from flask import Flask, flash, render_template,request, redirect, send_from_directory
 import requests
 from time import time
 import os
@@ -9,7 +9,6 @@ WORD = re.compile(r"\w+")
 import json 
 import numpy as np
 from tensorflow import keras
-import en_core_web_sm
 from sklearn.preprocessing import LabelEncoder
 from time import time
 import json 
@@ -26,8 +25,7 @@ stemmer = LancasterStemmer()
 import time
 from chest_xray_predictor import predict_xray
 from api_calls import get_country_data, mainlist, countries
-
-nlp = en_core_web_sm.load()
+from stats_vis import get_chart_path
 
 with open('data/intents.json') as file:
     data = json.load(file)
@@ -123,8 +121,15 @@ def stats():
         curr=[]
         for i in countries:
             curr.append(get_cosine(text_to_vector(i),text_to_vector(strin)))
-        return render_template("stats.html", ans=get_country_data(countries[curr.index(max(curr))]))
+        stats = get_country_data(countries[curr.index(max(curr))])
+        all_time_pie, daily_pie = get_chart_path(stats)
+        return render_template("stats.html", ans=stats, all_time_pie=all_time_pie, daily_pie=daily_pie)
     return render_template("stats.html")
+
+
+@app.route('/charts/<path:filename>')
+def download_file(filename):
+    return send_from_directory('charts', filename, as_attachment=True)
 
 if __name__=="__main__":
     port = int(os.environ.get("PORT", 5000))

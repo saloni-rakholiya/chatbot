@@ -28,6 +28,8 @@ Model 1
 ![bot1](/images/bot1.jpeg)
 Model 2
 ![bot2](/images/bot2.jpeg)
+Stats 
+![stats](/images/stats.jpeg)
 ## Set up
 - Clone the repo
 - Create a virtual environment and activate it \
